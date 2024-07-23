@@ -1,5 +1,5 @@
 /* eslint-env node */
-require('@rushstack/eslint-patch/modern-module-resolution')
+require('@rushstack/eslint-patch/modern-module-resolution');
 
 module.exports = {
   root: true,
@@ -19,7 +19,7 @@ module.exports = {
       'warn',
       {
         singleQuote: true, // 使用單引號
-        semi: false, // 不使用分號
+        semi: true, // 不使用分號
         printWidth: 80, // 一行最大 90 字元
         endOfLine: 'auto'
       }
@@ -33,4 +33,4 @@ module.exports = {
     'vue/no-setup-props-destructure': ['off'], // 關閉 props 解構規則
     'no-undef': ['error'] // 未定義變數錯誤提示
   }
-}
+};
