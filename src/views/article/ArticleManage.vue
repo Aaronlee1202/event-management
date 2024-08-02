@@ -1,3 +1,7 @@
+<script setup></script>
+
 <template>
-  <div>Manage</div>
+  <h1>Manage</h1>
 </template>
+
+<style lang="scss" scoped></style>

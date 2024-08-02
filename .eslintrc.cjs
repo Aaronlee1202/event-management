@@ -1,3 +1,5 @@
+const { ElLoading } = require('element-plus');
+
 /* eslint-env node */
 require('@rushstack/eslint-patch/modern-module-resolution');
 
@@ -32,5 +34,10 @@ module.exports = {
     ],
     'vue/no-setup-props-destructure': ['off'], // 關閉 props 解構規則
     'no-undef': ['error'] // 未定義變數錯誤提示
+  },
+  globals: {
+    ElMessage: 'readonly',
+    ElMessageBox: 'readonly',
+    ElLoading: 'readonly'
   }
 };

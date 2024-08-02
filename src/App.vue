@@ -6,29 +6,20 @@
 // 2. 取得路由參數 route
 //    const route = useRoute()
 import { onMounted } from 'vue';
-import { useUserStore, useCounterStore } from '@/stores';
-import instance from '@/utils/request';
-const userStore = useUserStore();
-const counterStore = useCounterStore();
-
-onMounted(() => {
-  instance
-    .get('/my/cate/info')
-    .then((res) => {
-      console.log(res.data);
-    })
-    .catch((err) => {
-      console.log(err.message);
-    });
-});
+// import { useUserStore, useCounterStore } from '@/stores';
+// const userStore = useUserStore();
+// const counterStore = useCounterStore();
+// import { useRoute } from 'vue-router';
+// const route = useRoute();
+onMounted(() => {});
 </script>
 
 <template>
-  <hr />
-  <router-view> </router-view>
-  <hr />
+  <div>
+    <router-view />
+  </div>
 
-  <div>我是 App</div>
+  <!-- <div>我是 App</div>
   <text-demo></text-demo>
   <el-divider />
   <h3>{{ userStore.token }}</h3>
@@ -37,7 +28,7 @@ onMounted(() => {
   <el-divider />
   <h3>{{ counterStore.count }}</h3>
   <el-button @click="counterStore.increment()">+1</el-button>
-  <el-button @click="counterStore.decrement()">-1</el-button>
+  <el-button @click="counterStore.decrement()">-1</el-button> -->
 </template>
 
 <style scoped></style>
