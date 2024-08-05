@@ -1,5 +1,3 @@
-const { ElLoading } = require('element-plus');
-
 /* eslint-env node */
 require('@rushstack/eslint-patch/modern-module-resolution');
 

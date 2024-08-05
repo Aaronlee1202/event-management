@@ -18,7 +18,7 @@ const userStore = useUserStore();
 onMounted(() => {
   // 取得使用者資料
   userStore.getUser();
-  console.log(userStore.user);
+  // console.log(userStore.user);
 });
 </script>
 
@@ -70,7 +70,7 @@ onMounted(() => {
         </div>
         <el-dropdown placement="bottom-end">
           <span class="el-dropdown__box">
-            <el-avatar :src="avatar" />
+            <el-avatar :src="userStore.user.user_pic || avatar" />
             <el-icon><CaretBottom /></el-icon>
           </span>
           <template #dropdown>
