@@ -2,12 +2,12 @@ import axios from 'axios';
 import { useUserStore } from '@/stores';
 import { ElMessage } from 'element-plus';
 
-const baseURL = 'http://big-event-vue-api-t.itheima.net';
+const baseURL = 'https://big-event-vue-api-t.itheima.net';
 
 const instance = axios.create({
   // TODO: baseURL
   baseURL,
-  timeout: 5000
+  timeout: 10000
 });
 
 // 請求的攔截器
