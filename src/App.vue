@@ -6,6 +6,7 @@
 // 2. 取得路由參數 route
 //    const route = useRoute()
 import { onMounted } from 'vue';
+import zh from 'element-plus/es/locale/lang/zh-cn.mjs';
 // import { useUserStore, useCounterStore } from '@/stores';
 // const userStore = useUserStore();
 // const counterStore = useCounterStore();
@@ -16,7 +17,9 @@ onMounted(() => {});
 
 <template>
   <div>
-    <router-view />
+    <el-config-provider :locale="zh">
+      <router-view />
+    </el-config-provider>
   </div>
 
   <!-- <div>我是 App</div>
