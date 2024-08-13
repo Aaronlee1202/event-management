@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import { editArticle, addArticle } from '@/api/article';
+import { editArticleSort, addArticleSort } from '@/api/article';
 import { ElMessage } from 'element-plus';
 
 const formRef = ref();
@@ -48,8 +48,8 @@ const onSubmit = async () => {
   console.log(formModel.value);
 
   formModel.value.id
-    ? await editArticle(formModel.value)
-    : await addArticle(formModel.value);
+    ? await editArticleSort(formModel.value)
+    : await addArticleSort(formModel.value);
 
   ElMessage({
     type: 'success',

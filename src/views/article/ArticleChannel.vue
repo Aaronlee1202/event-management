@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { Edit, Delete } from '@element-plus/icons-vue';
-import { getArticleList, deleteArticle } from '@/api/article';
+import { getArticleSortList, deleteArticleSort } from '@/api/article';
 
 import ChannelDialog from './src/ChannelEdit.vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
@@ -16,7 +16,7 @@ onMounted(() => {
 
 const getChannelList = async () => {
   loading.value = true;
-  const res = await getArticleList(); // 獲取文章分類列表
+  const res = await getArticleSortList(); // 獲取文章分類列表
   channelList.value = res.data.data;
   loading.value = false;
 };
@@ -31,7 +31,7 @@ const onDelete = async (row) => {
     confirmButtonText: '確認',
     cancelButtonText: '取消'
   });
-  await deleteArticle(row.id);
+  await deleteArticleSort(row.id);
   ElMessage({
     type: 'success',
     message: '刪除成功'

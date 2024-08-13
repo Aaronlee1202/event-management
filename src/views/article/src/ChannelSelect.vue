@@ -1,14 +1,16 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import { getArticleList } from '@/api/article';
+import { getArticleSortList } from '@/api/article';
 
 const channelList = ref([]);
 
-const getChannelList = async () => {
-  const res = await getArticleList();
-  channelList.value = res.data.data;
+const cateId = defineModel('cateId', {
+  type: [Number, String]
+});
 
-  console.log(channelList.value);
+const getChannelList = async () => {
+  const res = await getArticleSortList();
+  channelList.value = res.data.data;
 };
 
 onMounted(() => {
@@ -17,7 +19,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <el-select>
+  <el-select v-model="cateId" style="width: 120px">
     <el-option
       v-for="list in channelList"
       :key="list.id"

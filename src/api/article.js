@@ -1,14 +1,22 @@
 import axios from '@/utils/request';
 
-export const getArticleList = () => axios.get('/my/cate/list');
+// 取得文章分類
+export const getArticleSortList = () => axios.get('/my/cate/list');
 
-export const addArticle = (data) => axios.post('/my/cate/add', data);
+// 新增文章分類
+export const addArticleSort = (data) => axios.post('/my/cate/add', data);
 
-export const editArticle = (data) => axios.put('/my/cate/info', data);
+// 編輯文章分類
+export const editArticleSort = (data) => axios.put('/my/cate/info', data);
 
-export const deleteArticle = (id) =>
+// 刪除文章分類
+export const deleteArticleSort = (id) =>
   axios.delete(`/my/cate/del`, {
     params: {
       id
     }
   });
+
+// 取得文章列表
+export const getArticleList = (params) =>
+  axios.get('/my/article/list', { params });

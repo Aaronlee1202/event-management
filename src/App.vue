@@ -6,7 +6,7 @@
 // 2. 取得路由參數 route
 //    const route = useRoute()
 import { onMounted } from 'vue';
-import zh from 'element-plus/es/locale/lang/zh-cn.mjs';
+import zh from 'element-plus/es/locale/lang/zh-tw.mjs';
 // import { useUserStore, useCounterStore } from '@/stores';
 // const userStore = useUserStore();
 // const counterStore = useCounterStore();
