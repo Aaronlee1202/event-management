@@ -78,7 +78,7 @@ const onAddChannel = () => {
       </el-table-column>
       <template #empty> <el-empty description="No Data" /> </template>
     </el-table>
-    <!-- 監聽 emit 事件 -->
+    <!-- @success 監聽 emit 事件 -->
     <ChannelDialog ref="dialog" @success="onSuccess" />
   </page-container>
 </template>

@@ -3,41 +3,86 @@ import { Edit, Delete } from '@element-plus/icons-vue';
 import { onMounted, ref } from 'vue';
 import ChannelSelect from './src/ChannelSelect.vue';
 import { getArticleList } from '@/api/article';
-
-const onEdit = (row) => {
-  console.log('編輯文章', row);
-};
-
-const onDelete = (row) => {
-  console.log('刪除文章', row);
-};
-
-const getArticle = async () => {
-  const res = await getArticleList(params.value);
-  articleList.value = res.data.data;
-  console.log(articleList.value);
-};
+import { formatTime } from '@/utils/format';
+import ArticleEdit from './src/ArticleEdit.vue';
 
 onMounted(() => {
   getArticle();
 });
 
-// 假的文章列表
+// 文章列表
 const articleList = ref([]);
-
+// 頁數
+const total = ref(0);
 // 發請求的參數
 const params = ref({
-  pagenum: 1,
-  pagesize: 10,
+  pagenum: 1, // 當前頁碼
+  pagesize: 2, // 每頁顯示條數
   cate_id: '',
   state: ''
 });
+const loading = ref(false);
+const addArticle = ref();
+
+// 打開抽屜新增文章
+const openDrawer = () => {
+  addArticle.value.openDrawer({});
+};
+
+const getArticle = async () => {
+  loading.value = true;
+  const res = await getArticleList(params.value);
+  articleList.value = res.data.data;
+  total.value = res.data.total;
+  loading.value = false;
+  console.log('文章列表', res.data.data);
+};
+
+const handleSizeChange = (size) => {
+  params.value.pagenum = 1;
+  params.value.pagesize = size;
+  getArticle();
+  console.log('當前每頁的條數', size);
+};
+
+const handleCurrentChange = (page) => {
+  params.value.pagenum = page;
+  getArticle();
+  console.log('當前頁碼', page);
+};
+
+const onSearch = () => {
+  params.value.pagenum = 1;
+  getArticle();
+  console.log('查詢文章');
+};
+
+const onReset = () => {
+  params.value = {
+    pagenum: 1,
+    pagesize: 2,
+    cate_id: '',
+    state: ''
+  };
+  getArticle();
+  console.log('重置文章');
+};
+
+const onEdit = (row) => {
+  addArticle.value.openDrawer(row);
+};
+
+const onDelete = (row) => {
+  console.log('刪除文章', row);
+};
 </script>
 
 <template>
   <page-container title="文章分類">
     <!-- 具名插槽 -->
-    <template #extra> <el-button>新增文章</el-button> </template>
+    <template #extra>
+      <el-button @click="openDrawer">新增文章</el-button>
+    </template>
     <!-- 表單區域 -->
     <el-form inline>
       <el-form-item label="文章分類：">
@@ -52,18 +97,22 @@ const params = ref({
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary">查詢</el-button>
-        <el-button>重置</el-button>
+        <el-button type="primary" @click="onSearch">查詢</el-button>
+        <el-button @click="onReset">重置</el-button>
       </el-form-item>
     </el-form>
     <!-- 表格區域 -->
-    <el-table :data="articleList" style="width: 100%">
+    <el-table :data="articleList" style="width: 100%" v-loading="loading">
       <el-table-column prop="title" label="文章標題" width="400">
         <template #default="{ row }">
           <el-link type="primary" :underline="false">{{ row.title }}</el-link>
         </template>
       </el-table-column>
-      <el-table-column prop="pub_date" label="發布時間" />
+      <el-table-column prop="pub_date" label="發布時間">
+        <template #default="{ row }">
+          {{ formatTime(row.pub_date) }}
+        </template>
+      </el-table-column>
       <el-table-column prop="state" label="發布狀態" />
       <el-table-column prop="cate_name" label="分類" />
       <el-table-column label="操作" width="100">
@@ -87,5 +136,19 @@ const params = ref({
         </template>
       </el-table-column>
     </el-table>
+    <!-- 表單區域 -->
+    <el-pagination
+      style="margin-top: 20px; justify-content: flex-end"
+      :current-page="params.pagenum"
+      :page-size="params.pagesize"
+      :page-sizes="[2, 5, 10]"
+      :background="true"
+      :total="total"
+      layout="jumper, total, sizes, prev, pager, next"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    />
+
+    <ArticleEdit ref="addArticle" />
   </page-container>
 </template>

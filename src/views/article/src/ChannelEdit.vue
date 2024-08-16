@@ -61,6 +61,10 @@ const onSubmit = async () => {
   emit('success');
 };
 
+const cancel = () => {
+  dialogVisible.value = false;
+};
+
 // 向外部暴露的變量
 defineExpose({
   open
@@ -97,7 +101,7 @@ defineExpose({
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="onDelete">取消</el-button>
+        <el-button @click="cancel">取消</el-button>
         <el-button @click="onSubmit" type="primary"> 確認 </el-button>
       </span>
     </template>
