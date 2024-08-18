@@ -4,6 +4,15 @@ import { getArticleSortList } from '@/api/article';
 
 const channelList = ref([]);
 
+defineProps({
+  // 組件的寬度 可以由外部傳入設定
+  width: {
+    type: String,
+    default: '120px'
+  }
+});
+
+// 此組件有使用 v-model 進行雙向綁定
 const cateId = defineModel('cateId', {
   type: [Number, String]
 });
@@ -19,7 +28,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <el-select v-model="cateId" style="width: 120px">
+  <el-select v-model="cateId" :style="{ width }">
     <el-option
       v-for="list in channelList"
       :key="list.id"

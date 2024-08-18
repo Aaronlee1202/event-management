@@ -29,13 +29,13 @@ const openDrawer = () => {
   addArticle.value.openDrawer({});
 };
 
+// 獲取文章列表
 const getArticle = async () => {
   loading.value = true;
   const res = await getArticleList(params.value);
   articleList.value = res.data.data;
   total.value = res.data.total;
   loading.value = false;
-  console.log('文章列表', res.data.data);
 };
 
 const handleSizeChange = (size) => {
