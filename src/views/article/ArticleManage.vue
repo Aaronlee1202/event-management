@@ -17,7 +17,7 @@ const total = ref(0);
 // 發請求的參數
 const params = ref({
   pagenum: 1, // 當前頁碼
-  pagesize: 2, // 每頁顯示條數
+  pagesize: 4, // 每頁顯示條數
   cate_id: '',
   state: ''
 });
@@ -60,7 +60,7 @@ const onSearch = () => {
 const onReset = () => {
   params.value = {
     pagenum: 1,
-    pagesize: 2,
+    pagesize: 4,
     cate_id: '',
     state: ''
   };
@@ -74,6 +74,17 @@ const onEdit = (row) => {
 
 const onDelete = (row) => {
   console.log('刪除文章', row);
+};
+
+// 監聽子組件發布或修改成功
+const onSuccess = (type) => {
+  if (type === 'add') {
+    // 發布成功 渲染最後一頁
+    const lastPage = Math.ceil((total.value + 1) / params.value.pagesize);
+    params.value.pagenum = lastPage;
+    console.log('最後一頁', lastPage);
+  }
+  getArticle();
 };
 </script>
 
@@ -149,6 +160,6 @@ const onDelete = (row) => {
       @current-change="handleCurrentChange"
     />
 
-    <ArticleEdit ref="addArticle" />
+    <ArticleEdit ref="addArticle" @success="onSuccess" />
   </page-container>
 </template>

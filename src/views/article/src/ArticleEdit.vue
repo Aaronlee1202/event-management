@@ -1,9 +1,27 @@
 <script setup>
 import { ref } from 'vue';
 import ChannelSelect from './ChannelSelect.vue';
+import { Plus } from '@element-plus/icons-vue';
+import { nextTick } from 'vue';
+
+import { QuillEditor } from '@vueup/vue-quill';
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
+
+import { publishArticle } from '@/api/article';
+import { ElMessage } from 'element-plus';
 
 const drawerVisible = ref(false);
-const formRef = ref(null);
+const formRef = ref();
+const quillEditorRef = ref();
+
+// 圖片上傳
+const imgUrl = ref('');
+// 上傳圖片 預覽
+const onUploadFile = (file) => {
+  imgUrl.value = URL.createObjectURL(file.raw);
+
+  formModel.value.cover_img = file.raw;
+};
 
 const defaultFromModel = {
   title: '',
@@ -17,19 +35,60 @@ const defaultFromModel = {
 // 因此要先準備空數據
 const formModel = ref({ ...defaultFromModel });
 
+// 通知父組件
+const emit = defineEmits(['success']);
+// 提交文章
+const onPublish = async (state) => {
+  formModel.value.state = state;
+
+  const formData = new FormData();
+  for (let key in formModel.value) {
+    console.log(key, formModel.value[key]);
+
+    formData.append(key, formModel.value[key]);
+  }
+  console.log(formData.get('cover_img'));
+
+  if (formModel.value.id) {
+    console.log('編輯文章');
+  } else {
+    console.log('發布文章');
+    try {
+      await publishArticle(formData);
+      ElMessage({
+        type: 'success',
+        message: '新增成功'
+      });
+      // 通知父組件新增成功
+      emit('success', 'add');
+    } catch (error) {
+      console.error('發布文章失敗:', error);
+      ElMessage({
+        type: 'error',
+        message: '發布文章失敗'
+      });
+    }
+  }
+  drawerVisible.value = false;
+};
+
 // 基於傳入的參數判斷是要新增還是編輯
 // 傳入空對象代表新增
 // 傳入有值的對象代表編輯
 const openDrawer = (row) => {
   drawerVisible.value = true;
-  console.log(row);
-
   if (row.id) {
-    console.log('編輯文章');
+    console.log('編輯文章', formModel);
   } else {
-    // 新增文章前 先清空表單數據
+    // 發布文章前 先清空表單數據
     formModel.value = { ...defaultFromModel };
-    console.log('新增文章');
+    imgUrl.value = '';
+
+    nextTick(() => {
+      // 清空編輯器內容
+      quillEditorRef.value.setHTML('');
+    });
+    console.log('發布文章');
   }
 };
 
@@ -42,7 +101,7 @@ defineExpose({
 <template>
   <el-drawer
     v-model="drawerVisible"
-    :title="formModel.id ? '編輯文章' : '新增文章'"
+    :title="formModel.id ? '編輯文章' : '發布文章'"
     direction="rtl"
     size="50%"
   >
@@ -54,14 +113,72 @@ defineExpose({
       <el-form-item label="文章分類" prop="cate_id">
         <ChannelSelect v-model="formModel.cate_id" width="100%"></ChannelSelect>
       </el-form-item>
-      <el-form-item label="文章封面" prop="cover_img"> 文件上傳 </el-form-item>
+      <el-form-item label="文章封面" prop="cover_img">
+        <!-- 已關閉自動上傳 -->
+        <!-- 只需要在本地預覽 無須及時上傳 -->
+        <!-- URL.createObjectURL(...) create 一個本地預覽的地址 -->
+        <el-upload
+          class="avatar-uploader"
+          :auto-upload="false"
+          :show-file-list="false"
+          :on-change="onUploadFile"
+        >
+          <img v-if="imgUrl" :src="imgUrl" class="avatar" />
+          <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+        </el-upload>
+      </el-form-item>
       <el-form-item label="文章內容" prop="content">
-        <div class="editor">文章編輯器</div>
+        <div class="editor">
+          <quill-editor
+            ref="quillEditorRef"
+            theme="snow"
+            v-model:content="formModel.content"
+            contentType="html"
+          >
+          </quill-editor>
+        </div>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary">發表</el-button>
-        <el-button type="info">草稿</el-button>
+        <el-button type="primary" @click="onPublish('已发布')">發表</el-button>
+        <el-button type="info" @click="onPublish('草稿')">草稿</el-button>
       </el-form-item>
     </el-form>
   </el-drawer>
 </template>
+
+<style lang="scss" scoped>
+.avatar-uploader {
+  :deep() {
+    .avatar {
+      width: 178px;
+      height: 178px;
+      display: block;
+    }
+    .el-upload {
+      border: 1px dashed var(--el-border-color);
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: var(--el-transition-duration-fast);
+    }
+    .el-upload:hover {
+      border-color: var(--el-color-primary);
+    }
+    .el-icon.avatar-uploader-icon {
+      font-size: 28px;
+      color: #8c939d;
+      width: 178px;
+      height: 178px;
+      text-align: center;
+    }
+  }
+}
+
+.editor {
+  width: 100%;
+  :deep(.ql-editor) {
+    min-height: 200px;
+  }
+}
+</style>

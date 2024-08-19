@@ -20,3 +20,5 @@ export const deleteArticleSort = (id) =>
 // 取得文章列表
 export const getArticleList = (params) =>
   axios.get('/my/article/list', { params });
+
+export const publishArticle = (data) => axios.post('/my/article/add', data);
