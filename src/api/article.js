@@ -21,4 +21,13 @@ export const deleteArticleSort = (id) =>
 export const getArticleList = (params) =>
   axios.get('/my/article/list', { params });
 
+// 新增文章
 export const publishArticle = (data) => axios.post('/my/article/add', data);
+
+// 取得文章詳情
+export const getArticleInfo = (id) =>
+  axios.get('/my/article/info', {
+    params: {
+      id
+    }
+  });

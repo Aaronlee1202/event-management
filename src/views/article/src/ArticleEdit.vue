@@ -7,7 +7,9 @@ import { nextTick } from 'vue';
 import { QuillEditor } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
-import { publishArticle } from '@/api/article';
+import { publishArticle, getArticleInfo } from '@/api/article';
+import { baseURL } from '@/utils/request';
+import axios from 'axios';
 import { ElMessage } from 'element-plus';
 
 const drawerVisible = ref(false);
@@ -75,10 +77,21 @@ const onPublish = async (state) => {
 // 基於傳入的參數判斷是要新增還是編輯
 // 傳入空對象代表新增
 // 傳入有值的對象代表編輯
-const openDrawer = (row) => {
+const openDrawer = async (row) => {
   drawerVisible.value = true;
   if (row.id) {
-    console.log('編輯文章', formModel);
+    const res = await getArticleInfo(row.id);
+    formModel.value = res.data.data;
+    // 圖片需要單獨處理
+    imgUrl.value = baseURL + formModel.value.cover_img;
+    // NOTICE: 編輯之後要將圖片傳送給後端時，後端圖片需要的格式為 File
+    // 因此需要圖片轉換為 File 對象，並且儲存起來
+    formModel.value.cover_img = await imageURLToFile(
+      imgUrl.value,
+      formModel.value.cover_img
+    );
+
+    console.log('編輯文章');
   } else {
     // 發布文章前 先清空表單數據
     formModel.value = { ...defaultFromModel };
@@ -89,6 +102,22 @@ const openDrawer = (row) => {
       quillEditorRef.value.setHTML('');
     });
     console.log('發布文章');
+  }
+};
+
+// 使用 axios 將圖片地址轉換為 File 對象
+const imageURLToFile = async (url, fileName) => {
+  try {
+    // 1. 使用 axios 下載圖片
+    const res = await axios.get(url, { responseType: 'arraybuffer' });
+    const imageData = res.data;
+    // 2. 將圖片轉換為 Blob 對象
+    const blob = new Blob([imageData], { type: res.headers['content-type'] });
+    // 3. 將 Blob 對象轉換為 File 對象
+    return new File([blob], fileName, { type: blob.type });
+  } catch (error) {
+    console.error('圖片轉換失敗:', error);
+    throw error;
   }
 };
 
