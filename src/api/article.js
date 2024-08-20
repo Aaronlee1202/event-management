@@ -31,3 +31,14 @@ export const getArticleInfo = (id) =>
       id
     }
   });
+
+// 編輯文章
+export const editArticleInfo = (data) => axios.put('/my/article/info', data);
+
+// 刪除文章
+export const deleteArticle = (id) =>
+  axios.delete(`/my/article/info`, {
+    params: {
+      id
+    }
+  });

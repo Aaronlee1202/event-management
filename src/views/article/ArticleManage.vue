@@ -5,6 +5,8 @@ import ChannelSelect from './src/ChannelSelect.vue';
 import { getArticleList } from '@/api/article';
 import { formatTime } from '@/utils/format';
 import ArticleEdit from './src/ArticleEdit.vue';
+import { deleteArticle } from '@/api/article';
+import { ElMessage, ElMessageBox } from 'element-plus';
 
 onMounted(() => {
   getArticle();
@@ -72,7 +74,19 @@ const onEdit = (row) => {
   addArticle.value.openDrawer(row);
 };
 
-const onDelete = (row) => {
+const onDelete = async (row) => {
+  await ElMessageBox.confirm('你確定刪除文章嗎 :(', '溫馨提示', {
+    type: 'warning',
+    confirmButtonText: '確認',
+    cancelButtonText: '取消'
+  });
+  await deleteArticle(row.id);
+  ElMessage({
+    type: 'success',
+    message: '刪除成功'
+  });
+  // 更新文章列表
+  getArticle();
   console.log('刪除文章', row);
 };
 

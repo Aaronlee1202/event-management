@@ -7,7 +7,7 @@ import { nextTick } from 'vue';
 import { QuillEditor } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
-import { publishArticle, getArticleInfo } from '@/api/article';
+import { publishArticle, getArticleInfo, editArticleInfo } from '@/api/article';
 import { baseURL } from '@/utils/request';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
@@ -49,9 +49,14 @@ const onPublish = async (state) => {
 
     formData.append(key, formModel.value[key]);
   }
-  console.log(formData.get('cover_img'));
 
   if (formModel.value.id) {
+    await editArticleInfo(formData);
+    ElMessage({
+      type: 'success',
+      message: '編輯成功'
+    });
+    emit('success', 'edit');
     console.log('編輯文章');
   } else {
     console.log('發布文章');

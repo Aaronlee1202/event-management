@@ -9,3 +9,10 @@ export const userLogin = ({ username, password }) =>
 
 // 取得使用者資訊
 export const getUserInfo = () => axios.get('/my/userinfo');
+
+// 編輯使用者資訊
+export const editUserInfo = (data) => axios.put('/my/userinfo', data);
+
+// 上傳使用者大頭貼
+export const updateUserAvatar = (avatar) =>
+  axios.patch('/my/update/avatar', { avatar });
