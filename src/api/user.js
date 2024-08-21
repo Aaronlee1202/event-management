@@ -16,3 +16,7 @@ export const editUserInfo = (data) => axios.put('/my/userinfo', data);
 // 上傳使用者大頭貼
 export const updateUserAvatar = (avatar) =>
   axios.patch('/my/update/avatar', { avatar });
+
+// 修改密碼
+export const updatePassword = ({ old_pwd, new_pwd, re_pwd }) =>
+  axios.patch('/my/updatepwd', { old_pwd, new_pwd, re_pwd });

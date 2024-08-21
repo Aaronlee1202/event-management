@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import {
   Management,
   Promotion,
@@ -14,12 +15,21 @@ import avatar from '@/assets/default.png';
 import { useUserStore } from '@/stores';
 
 const userStore = useUserStore();
+const router = useRouter();
 
 onMounted(() => {
   // 取得使用者資料
   userStore.getUser();
   // console.log(userStore.user);
 });
+
+const loginOut = () => {
+  // 清空 token 個人訊息
+  userStore.removeToken();
+  userStore.setUser({});
+  // 跳轉到登入頁
+  router.push('/login');
+};
 </script>
 
 <template>
@@ -75,16 +85,28 @@ onMounted(() => {
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item command="profile" :icon="User"
+              <el-dropdown-item
+                command="profile"
+                :icon="User"
+                @click="$router.push('/user/profile')"
                 >基本資料</el-dropdown-item
               >
-              <el-dropdown-item command="avatar" :icon="Crop"
+              <el-dropdown-item
+                command="avatar"
+                :icon="Crop"
+                @click="$router.push('/user/avatar')"
                 >更換大頭貼</el-dropdown-item
               >
-              <el-dropdown-item command="password" :icon="EditPen"
+              <el-dropdown-item
+                command="password"
+                :icon="EditPen"
+                @click="$router.push('/user/password')"
                 >重置密碼</el-dropdown-item
               >
-              <el-dropdown-item command="logout" :icon="SwitchButton"
+              <el-dropdown-item
+                command="logout"
+                :icon="SwitchButton"
+                @click="loginOut"
                 >登出</el-dropdown-item
               >
             </el-dropdown-menu>

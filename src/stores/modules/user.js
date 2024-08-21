@@ -11,10 +11,12 @@ export const useUserStore = defineStore(
     const setToken = (newToken) => {
       token.value = newToken;
     };
+
     // 移除 token
     const removeToken = () => {
       token.value = '';
     };
+
     // 取得使用者資訊
     const user = ref({
       email: '',
@@ -23,12 +25,15 @@ export const useUserStore = defineStore(
       user_pic: '',
       username: ''
     });
+    const setUser = (data) => {
+      user.value = data;
+    };
     const getUser = async () => {
       const res = await getUserInfo();
-      user.value = res.data.data;
+      setUser(res.data.data);
     };
 
-    return { token, setToken, removeToken, getUser, user };
+    return { token, setToken, removeToken, getUser, user, setUser };
   },
   { persist: true }
 );
