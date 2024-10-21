@@ -31,10 +31,13 @@ const openDrawer = () => {
   addArticle.value.openDrawer({});
 };
 
-// 獲取文章列表
+// 取得文章列表
 const getArticle = async () => {
   loading.value = true;
   const res = await getArticleList(params.value);
+  res.data.data.forEach((element) => {
+    if (element.state === '已发布') element.state = '已發佈';
+  });
   articleList.value = res.data.data;
   total.value = res.data.total;
   loading.value = false;
@@ -90,10 +93,10 @@ const onDelete = async (row) => {
   console.log('刪除文章', row);
 };
 
-// 監聽子組件發布或修改成功
+// 監聽子組件發佈或修改成功
 const onSuccess = (type) => {
   if (type === 'add') {
-    // 發布成功 渲染最後一頁
+    // 發佈成功 渲染最後一頁
     const lastPage = Math.ceil((total.value + 1) / params.value.pagesize);
     params.value.pagenum = lastPage;
     console.log('最後一頁', lastPage);
@@ -115,9 +118,9 @@ const onSuccess = (type) => {
         <!-- 這邊需要與子組件雙向綁定 cateId 和 update 事件-->
         <channel-select v-model="params.cate_id" />
       </el-form-item>
-      <el-form-item label="發布狀態：">
+      <el-form-item label="發佈狀態：">
         <el-select v-model="params.state" style="width: 120px">
-          <el-option label="已發布" value="已發布" />
+          <el-option label="已發佈" value="已發佈" />
           <el-option label="草稿" value="草稿" />
         </el-select>
       </el-form-item>
@@ -133,12 +136,12 @@ const onSuccess = (type) => {
           <el-link type="primary" :underline="false">{{ row.title }}</el-link>
         </template>
       </el-table-column>
-      <el-table-column prop="pub_date" label="發布時間">
+      <el-table-column prop="pub_date" label="發佈時間">
         <template #default="{ row }">
           {{ formatTime(row.pub_date) }}
         </template>
       </el-table-column>
-      <el-table-column prop="state" label="發布狀態" />
+      <el-table-column prop="state" label="發佈狀態" />
       <el-table-column prop="cate_name" label="分類" />
       <el-table-column label="操作" width="100">
         <template #default="{ row }">

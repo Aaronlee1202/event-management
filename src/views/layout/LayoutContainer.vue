@@ -127,8 +127,9 @@ const loginOut = () => {
   .el-aside {
     background-color: #232323;
     &__logo {
-      height: 120px;
-      background: url('@/assets/logo.png') no-repeat center / 120px auto;
+      height: 100px;
+      background: url('@/assets/pinia.svg') no-repeat center / 120px auto;
+      background-size: contain;
     }
     .el-menu {
       border-right: none;

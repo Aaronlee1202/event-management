@@ -33,7 +33,7 @@ const defaultFromModel = {
   state: ''
 };
 
-// 發布文章的 api 請求需要有五個參數
+// 發佈文章的 api 請求需要有五個參數
 // 因此要先準備空數據
 const formModel = ref({ ...defaultFromModel });
 
@@ -59,7 +59,7 @@ const onPublish = async (state) => {
     emit('success', 'edit');
     console.log('編輯文章');
   } else {
-    console.log('發布文章');
+    console.log('發佈文章');
     try {
       await publishArticle(formData);
       ElMessage({
@@ -69,10 +69,10 @@ const onPublish = async (state) => {
       // 通知父組件新增成功
       emit('success', 'add');
     } catch (error) {
-      console.error('發布文章失敗:', error);
+      console.error('發佈文章失敗:', error);
       ElMessage({
         type: 'error',
-        message: '發布文章失敗'
+        message: '發佈文章失敗'
       });
     }
   }
@@ -98,7 +98,7 @@ const openDrawer = async (row) => {
 
     console.log('編輯文章');
   } else {
-    // 發布文章前 先清空表單數據
+    // 發佈文章前 先清空表單數據
     formModel.value = { ...defaultFromModel };
     imgUrl.value = '';
 
@@ -106,7 +106,7 @@ const openDrawer = async (row) => {
       // 清空編輯器內容
       quillEditorRef.value.setHTML('');
     });
-    console.log('發布文章');
+    console.log('發佈文章');
   }
 };
 
@@ -135,7 +135,7 @@ defineExpose({
 <template>
   <el-drawer
     v-model="drawerVisible"
-    :title="formModel.id ? '編輯文章' : '發布文章'"
+    :title="formModel.id ? '編輯文章' : '發佈文章'"
     direction="rtl"
     size="50%"
   >
