@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useUserStore } from '@/stores';
 import { ElMessage } from 'element-plus';
 
-const baseURL = 'https://big-event-vue-api-t.itheima.net';
+const baseURL = import.meta.env.VITE_APP_BASE_API;
 
 const instance = axios.create({
   // TODO: baseURL
